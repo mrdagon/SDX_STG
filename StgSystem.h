@@ -1,41 +1,42 @@
-﻿#pragma once
+﻿#pragma once//☀SDX_STG
 #include <SDXFrameWork.h>
 
-namespace SDX
+namespace SDX_STG
 {
+    using namespace SDX;
 namespace StgSystem
 {
-	static int 選択ステージ;
-	static int 難易度;
-	static int 自機タイプ;
+    static int 選択ステージ;
+    static int 難易度;
+    static int 自機タイプ;
 
-	static int 現在スコア;
-	static int 現在HP;
+    static int 現在スコア;
+    static int 現在HP;
     static int 回復HP;
-	static int 最大HP;
-	static int 現在チャージ;
+    static int 最大HP;
+    static int 現在チャージ;
 
-	static int 素材数[42];
-	static int 最高スコア[6][4];
-	static bool クリアフラグ[6][4];
+    static int 素材数[42];
+    static int 最高スコア[6][4];
+    static bool クリアフラグ[6][4];
 
-	static int コンボ数;
-	static int コンボ時間;
+    static int コンボ数;
+    static int コンボ時間;
 
-	static double 自然回復 = 0.1;
-	static double 吸い寄せ範囲 = 1;
-	static double レアドロップ率 = 0.01;
+    static double 自然回復 = 0.1;
+    static double 吸い寄せ範囲 = 1;
+    static double レアドロップ率 = 0.01;
 
-	static bool 勲章[15];
+    static bool 勲章[15];
 
     static int 仕事回数の合計;
     static int 強化回数の合計;
 }
 namespace Config
 {
-	static int 効果音量;
-	static int BGM音量;
-	static int ゆっくりボイス;
+    static int 効果音量;
+    static int BGM音量;
+    static int ゆっくりボイス;
 }
 namespace ItemData
 {
@@ -61,15 +62,15 @@ namespace ItemData
         いくさん//底力,
     };
 
-	class Data
-	{
+    class Data
+    {
         public:
         //素材3はレア確定
         Type 種類;
         int 必要素材[3];
         int 必要数[3];
-		
-		int 強化レベル = 1;
+        
+        int 強化レベル = 1;
         //現在の性能を得る
         //ボディなら耐久
         //武器なら攻撃力
@@ -149,7 +150,7 @@ namespace ItemData
             }
             return 0;
         }
-	};
+    };
     
     static Data dataS[15];
 
@@ -157,7 +158,7 @@ namespace ItemData
     {
         File csvFile("File/csv/wepon.csv" , FileMode::Read );
 
-		auto lineS = csvFile.GetCsvS();//1行目飛ばす
+        auto lineS = csvFile.GetCsvS();//1行目飛ばす
 
         for(int i=0;i<15;++i)
         {

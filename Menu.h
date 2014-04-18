@@ -1,199 +1,204 @@
-﻿#pragma once
-#include <SDXFrameWork.h>
-#include <Framework/IScene.h>
-#include <Utility/Module.h>
-#include <STG/Layer.h>
+﻿#pragma once//☀SDX_STG
+
+#include "IMenu.h"
+#include "Layer.h"
 #include "Unit.h"
 #include "Shot.h"
 #include "MenuObject.h"
+#include "DMenuObject.h"
 
-namespace SDX
+namespace SDX_STG
 {
-class Menu : public IScene
-{
-private:
+    using namespace SDX;
+    class Menu : public IMenu
+    {
+    private:
 
-	Layer<MenuObject> selects;
-	Layer<Object> backEffects;
-	Layer<Object> midEffects;
-	Layer<Object> frontEffects;
+        Layer<MenuObject> selects;
+        Layer<Object> backEffects;
+        Layer<Object> midEffects;
+        Layer<Object> frontEffects;
 
-	std::vector<std::shared_ptr<IModule>> events;
+        std::vector<std::shared_ptr<IModule>> events;
 
-	Camera camera;
+        Camera camera;
 
-	static Menu* menuNow;
+        bool isActive = false;//入力停止フラグ
 
-	bool isActive = false;//入力停止フラグ
+        int 選択ID = 0;
+        int メニュー横数 = 1;
+        int メニュー縦数 = 1;
 
-	int 選択ID = 0;
-	int メニュー横数 = 1;
-	int メニュー縦数 = 1;
+        std::string メッセージ;
 
-	std::string メッセージ;
+    protected:
+        bool isCancel = true;//キャンセル時に一番最後のオブジェクトを起動
+    public:
 
-protected:
-	bool isCancel = true;//キャンセル時に一番最後のオブジェクトを起動
-public:
+        int timer = 0;
 
-	int timer = 0;
+        Menu() :
+            camera(400, 300, 1)
+        {}
 
-	Menu() :
-		camera(400, 300, 1)
-	{}
+        virtual ~Menu(){}
 
-	virtual ~Menu(){}
+        void SetNow()
+        {
+            SMenu = this;
+            camera.SetActive();
+        }
 
-	void SetNow()
-	{
-		camera.SetActive();
-		menuNow = this;
-	}
+        void SetItemCount(int 横数 ,int 縦数)
+        {
+            メニュー横数 = 横数;
+            メニュー縦数 = 縦数;    
+        }
 
-	void SetItemCount(int 横数 ,int 縦数)
-	{
-		メニュー横数 = 横数;
-		メニュー縦数 = 縦数;	
-	}
+        virtual void Update()
+        {
+            SetNow();
+            ++timer;
 
-	static Menu* Now()
-	{
-		return menuNow;
-	}
+            if( isCancel && Input::pad.Button2.on )
+            {
+                selects[selects.GetCount()-1]->Push();
+            }
 
-	virtual void Update()
-	{
-		SetNow();
-		++timer;
+            //選択の変更
+            ChangeSelect();
 
-		if( isCancel && Input::pad.Button2.on )
-		{
-			selects[selects.GetCount()-1]->Push();
-		}
+            //イベント処理
+            for (auto it : events)
+            {
+                it->Update();
+            }
 
-		//選択の変更
-		ChangeSelect();
+            //オブジェクトの更新
+            selects.Update();
+            backEffects.Update();
+            midEffects.Update();
+            frontEffects.Update();
 
-		//イベント処理
-		for (auto it : events)
-		{
-			it->Update();
-		}
+            selects.ExeRemove(nullptr);
+            backEffects.ExeRemove( nullptr );
+            midEffects.ExeRemove(nullptr);
+            frontEffects.ExeRemove(nullptr);
+        }
 
-		//オブジェクトの更新
-		selects.Update();
-		backEffects.Update();
-		midEffects.Update();
-		frontEffects.Update();
+        void ChangeSelect()
+        {
+            if (selects.GetCount() == 0) return;
 
-		selects.ExeRemove(nullptr);
-		backEffects.ExeRemove( nullptr );
-		midEffects.ExeRemove(nullptr);
-		frontEffects.ExeRemove(nullptr);
-	}
+            if (     Input::pad.Up.on     && メニュー縦数 > 1) 選択ID -= メニュー横数;
+            else if (Input::pad.Down.on     && メニュー縦数 > 1) 選択ID += メニュー横数;
+            else if (Input::pad.Left.on  && メニュー横数 > 1) 選択ID --;
+            else if (Input::pad.Right.on && メニュー横数 > 1) 選択ID ++;
+            else return;
 
-	void ChangeSelect()
-	{
-		if (selects.GetCount() == 0) return;
+            const int メニュー合計 = メニュー縦数 * メニュー横数;
 
-		if (	 Input::pad.Up.on	 && メニュー縦数 > 1) 選択ID -= メニュー横数;
-		else if (Input::pad.Down.on	 && メニュー縦数 > 1) 選択ID += メニュー横数;
-		else if (Input::pad.Left.on  && メニュー横数 > 1) 選択ID --;
-		else if (Input::pad.Right.on && メニュー横数 > 1) 選択ID ++;
-		else return;
+            int 仮ID;
 
-		const int メニュー合計 = メニュー縦数 * メニュー横数;
+            if (選択ID < 0)
+            {
+                選択ID += メニュー合計;
+            }
+            else if (選択ID >= メニュー合計 )
+            {
+                選択ID -= メニュー合計;
+            }
 
-		int 仮ID;
+            仮ID = 選択ID;
 
-		if (選択ID < 0)
-		{
-			選択ID += メニュー合計;
-		}
-		else if (選択ID >= メニュー合計 )
-		{
-			選択ID -= メニュー合計;
-		}
+            if (選択ID >= selects.GetCount() )
+            {
+                仮ID = selects.GetCount() - 1;
+            }
 
-		仮ID = 選択ID;
+            Select(仮ID);
+            if( selects[仮ID]->説明文.length() > 0) this->メッセージ = selects[仮ID]->説明文;
+        }
 
-		if (選択ID >= selects.GetCount() )
-		{
-			仮ID = selects.GetCount() - 1;
-		}
+        virtual void Draw()
+        {
+            SetNow();
+            backEffects.Draw();
+            selects.Draw();
+            midEffects.Draw();
+            frontEffects.Draw();
+        }
 
-		Select(仮ID);
-		if( selects[仮ID]->説明文.length() > 0) this->メッセージ = selects[仮ID]->説明文;
-	}
+        void Select(int インデックス)
+        {
+            for (int i = 0; i < selects.GetCount(); ++i)
+            {
+                selects[i]->isSelect = (i == インデックス);
+            }
+        }
 
-	virtual void Draw()
-	{
-		SetNow();
-		backEffects.Draw();
-		selects.Draw();
-		midEffects.Draw();
-		frontEffects.Draw();
-	}
+        void ToEnd()
+        {
+            isEnd = true;
+        }
 
-	void Select(int インデックス)
-	{
-		for (int i = 0; i < selects.GetCount(); ++i)
-		{
-			selects[i]->isSelect = (i == インデックス);
-		}
-	}
+        void Add( MenuObject *追加するObject )
+        {
+            selects.Add(追加するObject);
 
-	void ToEnd()
-	{
-		isEnd = true;
-	}
+            if ( selects.GetCount() == 1)
+            {
+                追加するObject->isSelect = true;
+            }
+        }
 
-	static void Add( MenuObject *オブジェクト )
-	{
-		Now()->selects.Add( オブジェクト );
+        void Add(Object *追加するObject, int 待機時間 = 0)
+        {
+            midEffects.Add(追加するObject, 待機時間);
+        }
 
-		if (Now()->selects.GetCount() == 1)
-		{
-			オブジェクト->isSelect = true;
-		}
-	}
+        void AddFront(Object *追加するObject, int 待機時間 = 0)
+        {
+            frontEffects.Add(追加するObject, 待機時間);
+        }
 
-	static void Add(Object *オブジェクト, int 待機時間 = 0)
-	{
-		Now()->midEffects.Add(オブジェクト, 待機時間);
-	}
+        void AddBack(Object *追加するObject, int 待機時間 = 0)
+        {
+            backEffects.Add(追加するObject, 待機時間);
+        }
 
-	static void AddFront(Object *オブジェクト, int 待機時間 = 0)
-	{
-		Now()->frontEffects.Add(オブジェクト, 待機時間);
-	}
+        void AddEvent(IModule *追加するEvent)
+        {
+            events.emplace_back(追加するEvent);
+        }
 
-	static void AddBack(Object *オブジェクト, int 待機時間 = 0)
-	{
-		Now()->backEffects.Add(オブジェクト, 待機時間);
-	}
+        bool IsActive()
+        {
+            return isActive;
+        }
 
-	static void AddEvent(IModule *モジュール)
-	{
-		Now()->events.emplace_back(モジュール);
-	}
+        void SetActive(bool 入力可能フラグ )
+        {
+            isActive = 入力可能フラグ;
+        }
 
-	static bool IsActive()
-	{
-		return Now()->isActive;
-	}
+        std::string& GetMessage()
+        {
+            return メッセージ;
+        }
 
-	static void SetActive(bool 入力可能フラグ )
-	{
-		Now()->isActive = 入力可能フラグ;
-	}
+        virtual void Init(){};
 
-	static std::string& Message()
-	{
-		return Now()->メッセージ;
-	}
+        virtual void Final(){};
 
-	virtual void Init(){};
-	virtual void Final(){};
-};
+        void InitDefault(const char* デフォルトメッセージ)
+        {
+            SetNow();
+
+            AddFront(new 暗幕(255));
+            AddBack(new エフェクト(MSystem::背景[6], 400, 300));
+
+            Add(new メッセージ枠(デフォルトメッセージ));
+        }
+    };
 }

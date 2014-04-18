@@ -1,4 +1,5 @@
-﻿#include <SDXFrameWork.h>
+﻿//☀SDX_STG
+#include <SDXFrameWork.h>
 
 #include "Player.h"
 #include "Wepon.h"

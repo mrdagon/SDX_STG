@@ -1,102 +1,106 @@
-#pragma once
+ï»¿#pragma once//â˜€SDX_STG
 #include <SDXFrameWork.h>
-#include "ModelMove.h"
+#include <Framework/ModelMove.h>
 
-namespace SDX
+namespace SDX_STG
 {
-/// <summary>Š‘®‚·‚éƒŒƒCƒ„[‚Ì¯•Êq</summary>
+    using namespace SDX;
+//æ‰€å±ã™ã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼
 enum class Belong
 {
-	Ally,
-	EnemyF,
-	EnemyG,
-	Item,
-	Block,
-	Etc
+    Ally,
+    EnemyF,
+    EnemyG,
+    Item,
+    Block,
+    Etc
 };
 
-/// <summary>Model‚ÉSTG—p‚Ì‹@”\‚ğ’Ç‰Á‚µ‚½ƒNƒ‰ƒX</summary>
-///	\include
+template <class T> class Layer;
+
+///Modelã«STGç”¨ã®æ©Ÿèƒ½ã‚’è¿½åŠ ã—ãŸã‚¯ãƒ©ã‚¹
+///    \include
 class Object : public Model , public ModelMove
 {
+template<class T>
 friend class Layer;
-
+    
 protected:
-	int  timer = 0;///”­¶‚µ‚Ä‚©‚çŒo‰ß‚µ‚½ƒtƒŒ[ƒ€”
-	bool isOutCheck = true;///”ÍˆÍŠOˆ—‚ğs‚¤‚©ƒtƒ‰ƒO
-	double  power;///UŒ‚—Í
-	int  attribute;///UŒ‚‘®«
-	int  lifeTime = -1;///¶‘¶ŠúŠÔ
-	Belong belong;///Š‘®‚·‚éƒŒƒCƒ„[
+    int  timer = 0;///ç™ºç”Ÿã—ã¦ã‹ã‚‰çµŒéã—ãŸãƒ•ãƒ¬ãƒ¼ãƒ æ•°
+    bool isOutCheck = true;///ç¯„å›²å¤–å‡¦ç†ã‚’è¡Œã†ã‹ãƒ•ãƒ©ã‚°
+    double  power;///æ”»æ’ƒåŠ›
+    int  attribute;///æ”»æ’ƒå±æ€§
+    int  lifeTime = -1;///ç”Ÿå­˜æœŸé–“
+    Belong belong;///æ‰€å±ã™ã‚‹ãƒ¬ã‚¤ãƒ¤ãƒ¼
 
-	/// <summary>Á–Å”»’è‚ğs‚¤</summary>
-	virtual bool RemoveCheck(Rect* ‘¶İ‰Â”\”ÍˆÍ)
-	{
-		if(
-			timer == this->lifeTime ||
-			(isOutCheck && !shape->Hit( ‘¶İ‰Â”\”ÍˆÍ ) )
-			)
-		{
-			this->isRemove = true;
-		}
+    /// æ¶ˆæ»…åˆ¤å®šã‚’è¡Œã†
+    virtual bool RemoveCheck(Rect* å­˜åœ¨å¯èƒ½ç¯„å›²)
+    {
+        if(
+            timer == this->lifeTime ||
+            (isOutCheck && å­˜åœ¨å¯èƒ½ç¯„å›² && !shape->Hit( å­˜åœ¨å¯èƒ½ç¯„å›² ) )
+           )
+        {
+            this->isRemove = true;
+        }
 
-		if (isRemove) Remove();
+        if (isRemove) Remove();
 
-		return this->isRemove;
-	}
+        return this->isRemove;
+    }
 
-	/// <summary>Õ“Ë‚µ‚½‘Šè‚ÉUŒ‚‚·‚é</summary>
-	virtual void Attack(Object *UŒ‚‘ÎÛ )
-	{
-		UŒ‚‘ÎÛ->Damaged( power , attribute);
-	}
-
-	void SetTimer(int ƒtƒŒ[ƒ€”)
-	{
-		timer = ƒtƒŒ[ƒ€”;
-	}
+    void SetTimer(int ãƒ•ãƒ¬ãƒ¼ãƒ æ•°)
+    {
+        timer = ãƒ•ãƒ¬ãƒ¼ãƒ æ•°;
+    }
 
 public:
-	/// <summary>à–¾</summary>
-	Object( Shape *“–‚½‚è”»’è , Sprite *ƒfƒtƒHƒ‹ƒgƒXƒvƒ‰ƒCƒg , double UŒ‚—Í = 0 , Belong Š‘® = Belong::Etc):
-		Model( “–‚½‚è”»’è , ƒfƒtƒHƒ‹ƒgƒXƒvƒ‰ƒCƒg ),
-		ModelMove(this),
-		power(UŒ‚—Í),
-		belong(Š‘®)
-	{}
+    //èª¬æ˜
+    Object( Shape *å½“ãŸã‚Šåˆ¤å®š , Sprite *ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ , double æ”»æ’ƒåŠ› = 0 , Belong æ‰€å± = Belong::Etc):
+        Model( å½“ãŸã‚Šåˆ¤å®š , ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ ),
+        ModelMove(this),
+        power(æ”»æ’ƒåŠ›),
+        belong(æ‰€å±)
+    {}
 
-	int GetTimer()
-	{
-		return timer;
-	}
+    int GetTimer()
+    {
+        return timer;
+    }
 
-	virtual ~Object(){}
+    virtual ~Object(){}
 
-	/// <summary>ó‘Ô‚ÌXV</summary>
-	virtual void Update()
-	{
-		this->timer++;
-		AnimeUpdate();
-		this->Act();
-	}
+    //çŠ¶æ…‹ã®æ›´æ–°
+    virtual void Update()
+    {
+        this->timer++;
+        AnimeUpdate();
+        this->Act();
+    }
 
+    Belong GetBelong()
+    {
+        return belong;
+    }
+    
+    //è¡çªã—ãŸç›¸æ‰‹ã«æ”»æ’ƒã™ã‚‹
+    virtual void Attack(Object *æ”»æ’ƒå¯¾è±¡ )
+    {
+        æ”»æ’ƒå¯¾è±¡->Damaged( power );
+    }
 
-	Belong GetBelong()
-	{
-		return belong;
-	}
+    //Updateæ™‚ã®è¡Œå‹•å‡¦ç†
+    virtual void Act(){}
 
-	/// <summary>Update‚Ìs“®ˆ—</summary>
-	virtual void Act(){}
+    //æ¶ˆæ»…æ™‚ã®å‡¦ç†
+    virtual void Remove(){}
 
-	/// <summary>Á–Å‚Ìˆ—</summary>
-	virtual void Remove(){}
+    //ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ãŸæ™‚ã®å‡¦ç†
+    virtual void React(double ãƒ€ãƒ¡ãƒ¼ã‚¸é‡){}
 
-	/// <summary>ƒ_ƒ[ƒW‚ğó‚¯‚½‚Ìˆ—</summary>
-	virtual void React(){}
-
-	/// <summary>UŒ‚‚³‚ê‚½‚Ìˆ—</summary>
-	virtual void Damaged(double damage, int attribute){}
-
+    //æ”»æ’ƒã•ã‚ŒãŸæ™‚ã®å‡¦ç†
+    virtual void Damaged(double ãƒ€ãƒ¡ãƒ¼ã‚¸é‡){}
+    
+    bool isSelect = false;
 };
 }
