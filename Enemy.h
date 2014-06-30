@@ -24,7 +24,7 @@ public:
         EnemyData::data[(int)type].物理 * ( 1 + StgSystem::難易度 * StgSystem::難易度 / 4.0),
            belong)
     {
-        sprites[0]->SetGap(性能.ずれX, 性能.ずれY);
+        sprites[0]->SetGap({ 性能.ずれX, 性能.ずれY });
         if (x == 0) sprites[0]->isTurn = true;
     }
 
@@ -36,7 +36,7 @@ public:
                 EnemyData::data[(int)type].物理 ,
                 belong)
     {
-        sprites[0]->SetGap( 性能.ずれX , 性能.ずれY );
+        sprites[0]->SetGap({ 性能.ずれX, 性能.ずれY });
         if( x == 0 ) sprites[0]->isTurn = true;
     }
 

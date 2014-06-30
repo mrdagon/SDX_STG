@@ -53,7 +53,7 @@ namespace SDX_STG
         virtual void Draw() const
         {
             Screen::SetBlendMode(BlendMode::Alpha, 暗さ);
-            Drawing::Rect(0, 0, 800, 600, Color::Black, true);
+            Drawing::Rect({ 0, 0, 800, 600 }, Color::Black, true);
             Screen::SetBlendMode(BlendMode::Alpha, 255);
         }
 

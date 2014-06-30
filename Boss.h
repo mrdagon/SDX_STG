@@ -14,25 +14,25 @@ namespace SDX_STG
             Enemy(x, y, EnemyID::ビッグヘリ, &MEnemy::大型ヘリ・本体)
         {
             sprites.emplace_back(new SpAnime(&MEnemy::大型ヘリ・ガドリング));
-            sprites[1]->SetGap(68, 52);
+            sprites[1]->SetGap({ 68, 52 });
 
             sprites.emplace_back(new SpAnime(&MEnemy::大型ヘリ・ガドリング));
-            sprites[2]->SetGap(-68, 52);
+            sprites[2]->SetGap({-68, 52});
 
             sprites.emplace_back(new SpImage(MEnemy::大型ヘリ・パーツ[0]));
-            sprites[3]->SetGap(-108, 0);
+            sprites[3]->SetGap({ -108, 0 });
 
             sprites.emplace_back(new SpImage(MEnemy::大型ヘリ・パーツ[1]));
-            sprites[4]->SetGap( 108, 0);
+            sprites[4]->SetGap({ 108, 0 });
 
             sprites.emplace_back(new SpAnime(&MEnemy::大型ヘリ・砲台));
-            sprites[5]->SetGap( 0 , 0);
+            sprites[5]->SetGap({ 0, 0 });
 
             sprites.emplace_back(new SpAnime(&MEnemy::大型ヘリ・プロペラ));
-            sprites[6]->SetGap(-68 , 0);
+            sprites[6]->SetGap({ -68, 0 });
 
             sprites.emplace_back(new SpAnime(&MEnemy::大型ヘリ・プロペラ));
-            sprites[7]->SetGap(68 , 0);
+            sprites[7]->SetGap({ 68, 0 });
 
             this->SetZoom(2);
 

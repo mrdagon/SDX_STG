@@ -259,38 +259,38 @@ namespace 画面
                 {              
                     ItemData::Data* dat = &ItemData::dataS[装備ID];
 
-                    MFrame::BMPフレーム[2].Draw(350,  95 ,250,40);     
-                    MFrame::BMPフレーム[2].Draw(350, 140 ,250,40);
+                    MFrame::BMPフレーム[2].Draw({ 350, 95, 250, 40 });
+                    MFrame::BMPフレーム[2].Draw({ 350, 140, 250, 40 });
 
-                    MFont::ゴシック.Draw(360, 101,Color::White, Texts::装備[装備ID].name);
-                    MFont::ゴシック小.Draw(360,144,Color::White, Texts::装備[装備ID].info);
+                    MFont::ゴシック.Draw({ 360, 101 }, Color::White, Texts::装備[装備ID].name);
+                    MFont::ゴシック小.Draw({ 360, 144 }, Color::White, Texts::装備[装備ID].info);
 
                     //必要素材
-                    for(int i=0;i<3;++i)
+                    for (int i = 0; i < 3; ++i)
                     {
-                        const int dy = i*40 + 15;
+                        const int dy = i * 40 + 15;
                         const int 素材ID = dat->種類計算(i);
                         const int 必要数 = dat->必要数計算(i);
 
-                        if(必要数 == 0 ) continue;
+                        if (必要数 == 0) continue;
 
-                        MFrame::BMPフレーム[2].Draw(350,171 + dy, 30,30);//素材ICON                    
-                        MFrame::BMPフレーム[2].Draw(385,168 + dy,215,36);//素材名前枠
+                        MFrame::BMPフレーム[2].Draw({ 350, 171 + dy, 30, 30 });//素材ICON                    
+                        MFrame::BMPフレーム[2].Draw({ 385, 168 + dy, 215, 36 });//素材名前枠
 
-                        MFont::ゴシック小.DrawExtend(510,174 + dy ,1,1,Color::White , "所持     必要");
+                        MFont::ゴシック小.DrawExtend({ 510, 174 + dy }, 1, 1, Color::White, "所持     必要");
 
-                        MItem::imageS[素材ID]->DrawRotate(365,186 + dy , 1 , 0);
-                        MFont::ゴシック.Draw(395,174 + dy,Color::White, Texts::素材[素材ID].name );
-                        MFont::ゴシック.Draw(540,174 + dy,Color::White, "/" );
+                        MItem::imageS[素材ID]->DrawRotate({ 365, 186 + dy }, 1, 0);
+                        MFont::ゴシック.Draw({ 395, 174 + dy }, Color::White, Texts::素材[素材ID].name);
+                        MFont::ゴシック.Draw({540, 174 + dy}, Color::White, "/");
                     
                         if( StgSystem::素材数[素材ID] >= 必要数)
                         {
-                            MFont::白絵.DrawExtend(496,190 + dy ,1,1,Color::White , { std::setw(5) , StgSystem::素材数[素材ID] } );
+                            MFont::白絵.DrawExtend({ 496, 190 + dy }, 1, 1, Color::White, { std::setw(5), StgSystem::素材数[素材ID] });
                         }else{
-                            MFont::白絵.DrawExtend(496,190 + dy ,1,1,Color::Red   , { std::setw(5) , StgSystem::素材数[素材ID] } );
+                            MFont::白絵.DrawExtend({496,190 + dy} ,1,1,Color::Red   , { std::setw(5) , StgSystem::素材数[素材ID] } );
                         }
 
-                        MFont::白絵.DrawExtend(548,190 + dy ,1,1,Color::White , { std::setw(5) , 必要数 } );
+                        MFont::白絵.DrawExtend({ 548, 190 + dy }, 1, 1, Color::White, { std::setw(5), 必要数 });
                     }
 
                     //ラベル
@@ -312,17 +312,17 @@ namespace 画面
                         case 14:項目 = "耐久";break;                
                     }
 
-                    MFont::ゴシック.Draw(350,305,Color::White,"レベル");
-                    MFont::ゴシック.Draw(362,335,Color::White, 項目);
+                    MFont::ゴシック.Draw({ 350, 305 }, Color::White, "レベル");
+                    MFont::ゴシック.Draw({ 362, 335 }, Color::White, 項目);
                 
-                    MFont::白絵.DrawExtend(430,310,2,2, Color::White,{ std::setw(4), dat->強化レベル });
-                    MFont::白絵.DrawExtend(520,310,2,2,{120,255,120},{ std::setw(5), dat->強化レベル + 1});
+                    MFont::白絵.DrawExtend({ 430, 310 }, 2, 2, Color::White, { std::setw(4), dat->強化レベル });
+                    MFont::白絵.DrawExtend({ 520, 310 }, 2, 2, { 120, 255, 120 }, { std::setw(5), dat->強化レベル + 1 });
 
-                    MFont::ゴシック.Draw(500,305,Color::White,">>");
-                    MFont::ゴシック.Draw(500,335,Color::White,">>");
+                    MFont::ゴシック.Draw({ 500, 305 }, Color::White, ">>");
+                    MFont::ゴシック.Draw({ 500, 335 }, Color::White, ">>");
 
-                    MFont::白絵.DrawExtend(430,340,2,2, Color::White,{ std::setw(4),改良前});
-                    MFont::白絵.DrawExtend(520,340,2,2,{120,255,120},{ std::setw(5),改良後});
+                    MFont::白絵.DrawExtend({ 430, 340 }, 2, 2, Color::White, { std::setw(4), 改良前 });
+                    MFont::白絵.DrawExtend({ 520, 340 }, 2, 2, { 120, 255, 120 }, { std::setw(5), 改良後 });
                 }
             }
 
@@ -413,7 +413,7 @@ namespace 画面
                 sprites[1]->isVisible = isSelect;
                 MenuObject::Draw();
 
-                MFont::白絵.Draw((int)GetX()+25,(int)GetY()+15,Color::White,{ std::setw(4) , StgSystem::素材数[素材ID] });
+                MFont::白絵.Draw({ GetX() + 25, GetY() + 15 }, Color::White, { std::setw(4), StgSystem::素材数[素材ID] });
             }
         };
 
@@ -513,12 +513,12 @@ namespace 画面
             virtual void Draw() const
             {
                 選択枠::Draw();
-                MFont::ゴシック.Draw((int)GetX() + 120,(int)GetY()+7 ,Color::White, { std::setw(3) , 音量 * 10});
+                MFont::ゴシック.Draw({ GetX() + 120, GetY() + 7 }, Color::White, { std::setw(3), 音量 * 10 });
 
-                MFrame::BMPフレーム[2].Draw((int)GetX() + 180 ,(int)GetY(), 220 , 40 );
+                MFrame::BMPフレーム[2].Draw({ GetX() + 180, GetY(), 220, 40 });
                 for(int i=0;i<音量;++i)
                 {
-                    Drawing::Rect((int)GetX() + 195 + i * 19 , (int)GetY() +5 , 17 , 30, Color::Red , true);            
+                    Drawing::Rect({ GetX() + 195 + i * 19, GetY() + 5, 17, 30 }, Color::Red, true);
                 }
             }
 

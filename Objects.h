@@ -95,27 +95,27 @@ namespace SDX_STG
             MSystem::背景[1]->DrawPart(650, 0, 0, 0,150,600);
 
             //スコア表示
-            MFont::白絵.Draw(155,  5, Color::Red   , "SCORE");
-            MFont::白絵.DrawExtend(160, 15, 2, 2, Color::White , {score});
+            MFont::白絵.Draw({ 155, 5 }, Color::Red, "SCORE");
+            MFont::白絵.DrawExtend({ 160, 15 }, 2, 2, Color::White, { score });
 
-            MFont::白絵.Draw(455, 5 , Color::Red   , "HISCORE");
-            MFont::白絵.DrawExtend(460, 15 , 2, 2, Color::White , {StgSystem::最高スコア[StgSystem::選択ステージ][StgSystem::難易度]});
+            MFont::白絵.Draw({ 455, 5 }, Color::Red, "HISCORE");
+            MFont::白絵.DrawExtend({ 460, 15 }, 2, 2, Color::White, { StgSystem::最高スコア[StgSystem::選択ステージ][StgSystem::難易度] });
 
             //ライフ表示
-            MFrame::BMPフレーム[3].Draw(155, 47, StgSystem::最大HP + 6, 20);
-            MFont::白絵.Draw(160, 40, Color::Aqua , "SHIELD");
-            Drawing::Rect(158, 50, StgSystem::回復HP , 14, Color::Green, true);
-            Drawing::Rect(158, 50, StgSystem::現在HP , 14, Color::Red, true);
+            MFrame::BMPフレーム[3].Draw({ 155, 47, StgSystem::最大HP + 6, 20 });
+            MFont::白絵.Draw({ 160, 40 }, Color::Aqua, "SHIELD");
+            Drawing::Rect({ 158, 50, StgSystem::回復HP, 14 }, Color::Green, true);
+            Drawing::Rect({ 158, 50, StgSystem::現在HP, 14 }, Color::Red, true);
 
             //必殺ゲージ表示
-            MFrame::BMPフレーム[3].Draw(155, 77, 100 + 6, 20);
-            MFont::白絵.DrawExtend(160, 70,1,1 ,Color::Red, "HYPER");
-            Drawing::Rect(158, 80, StgSystem::現在チャージ , 14, Color::Red, true);
+            MFrame::BMPフレーム[3].Draw({ 155, 77, 100 + 6, 20 });
+            MFont::白絵.DrawExtend({ 160, 70 }, 1, 1, Color::Red, "HYPER");
+            Drawing::Rect({ 158, 80, StgSystem::現在チャージ, 14 }, Color::Red, true);
 
             //コンボ数表示
-            MFrame::BMPフレーム[3].Draw(515, 55, 125 + 6, 30);
-            MFont::白絵.DrawExtend(520, 40 , 2 , 2, Color::Lime , "COMBO");
-            MFont::白絵.DrawExtend(520, 60 , 3 , 3, Color::White , {"x",std::setw(4),StgSystem::コンボ数});
+            MFrame::BMPフレーム[3].Draw({ 515, 55, 125 + 6, 30 });
+            MFont::白絵.DrawExtend({ 520, 40 }, 2, 2, Color::Lime, "COMBO");
+            MFont::白絵.DrawExtend({ 520, 60 }, 3, 3, Color::White, { "x", std::setw(4), StgSystem::コンボ数 });
 
         }
     };
