@@ -6,10 +6,10 @@
 
 namespace SDX_STG
 {
-    using namespace SDX;
+using namespace SDX;
 class Wepon;
 
-class Player : public Unit
+class Player : public IUnit
 {
 protected:
     int weponCount = 0;
@@ -79,11 +79,15 @@ public:
         return weponCount;
     }
 
-    Player( Shape *当たり判定 , Sprite *前進絵 , Sprite *横絵 , double 最大HP ,double 速さ) :
-        Unit(当たり判定, 前進絵, 最大HP,  ItemData::dataS[ItemData::ゆうぎ].Get(), Belong::Ally),
+    Circle shape;
+    SpImage sprite;
+
+    Player( Circle &&図形 , Image *画像 , Sprite *横絵 , double 最大HP ,double 速さ) :
+        IUnit(shape,sprite, 最大HP,  ItemData::dataS[ItemData::ゆうぎ].Get(), Belong::Ally),
+        shape(図形),
+        sprite(画像),
         speed(速さ)
     {
-        Model::Add(横絵);
         StgSystem::最大HP = (int)hpMax;
         StgSystem::現在HP = (int)hpMax;
         StgSystem::現在チャージ = 0;

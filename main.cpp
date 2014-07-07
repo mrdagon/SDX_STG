@@ -1,15 +1,16 @@
 ﻿//☀Unicode
 #include "stdafx.h"
-#include "DXStg.h"
-#include "staticValue.h"
+//#include "DXStg.h"
+//#include "staticValue.h"
 
-#include "InterMission.h"
+//#include "InterMission.h"
 
 using namespace SDX;
-using namespace SDX_STG;
+//using namespace SDX_STG;
 
 int main(int argc, char* argv[])
 {
+    /*
     System::Initialise("ゆっくりしていってね！！！", 800 , 600 );
 
     //各リソースの読込
@@ -29,6 +30,7 @@ int main(int argc, char* argv[])
         
     StgSystem::SaveData(FileMode::Write);
     System::End();
+    */
 
     return 0;
 }

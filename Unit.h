@@ -5,7 +5,7 @@ namespace SDX_STG
 {
     using namespace SDX;
 
-    class Unit : public Object
+    class IUnit : public IObject
     {
     protected:
         virtual void Dead(){}
@@ -16,10 +16,10 @@ namespace SDX_STG
         bool   isDead = false ;
         unsigned int invTime = 0;///無敵時間
 
-        Unit( Shape *shape , Sprite *sprite , double hpMax , double power ,Belong belong):
-            Object( shape , sprite , power ,belong),
-            hp(hpMax),
-            hpMax(hpMax)
+        IUnit( IShape &図形 , ISprite &描画方法 , double 最大Hp , double 攻撃力 ,Belong 所属):
+            IObject( 図形 , 描画方法 , 攻撃力 ,所属),
+            hp(最大Hp),
+            hpMax(最大Hp)
         {}
 
         virtual void Update()
@@ -50,7 +50,7 @@ namespace SDX_STG
 
             if (
                 timer == this->lifeTime ||
-                (isOutCheck && !shape->Hit(area))
+                (isOutCheck && !iShape.Hit(area))
                 )
             {
                 this->isRemove = true;

@@ -1,6 +1,5 @@
 ﻿#pragma once//☀SDX_STG
 #include <SDXFrameWork.h>
-#include <Framework/ModelMove.h>
 
 namespace SDX_STG
 {
@@ -20,7 +19,7 @@ template <class T> class Layer;
 
 ///ModelにSTG用の機能を追加したクラス
 ///    \include
-class Object : public Model , public ModelMove
+class IObject : public IModel
 {
 template<class T>
 friend class Layer;
@@ -38,7 +37,7 @@ protected:
     {
         if(
             timer == this->lifeTime ||
-            (isOutCheck && 存在可能範囲 && !shape->Hit( 存在可能範囲 ) )
+            (isOutCheck && 存在可能範囲 && !iShape.Hit( 存在可能範囲 ) )
            )
         {
             this->isRemove = true;
@@ -56,9 +55,8 @@ protected:
 
 public:
     //説明
-    Object( Shape *当たり判定 , Sprite *デフォルトスプライト , double 攻撃力 = 0 , Belong 所属 = Belong::Etc):
-        Model( 当たり判定 , デフォルトスプライト ),
-        ModelMove(this),
+    IObject( IShape &図形 , ISprite &描画方法 , double 攻撃力 = 0 , Belong 所属 = Belong::Etc):
+        IModel(図形, 描画方法),
         power(攻撃力),
         belong(所属)
     {}
@@ -68,7 +66,7 @@ public:
         return timer;
     }
 
-    virtual ~Object(){}
+    virtual ~IObject(){}
 
     //状態の更新
     virtual void Update()
@@ -84,7 +82,7 @@ public:
     }
     
     //衝突した相手に攻撃する
-    virtual void Attack(Object *攻撃対象 )
+    virtual void Attack(IObject *攻撃対象 )
     {
         攻撃対象->Damaged( power );
     }

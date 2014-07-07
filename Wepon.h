@@ -6,7 +6,7 @@
 namespace SDX_STG
 {
     using namespace SDX;
-class Wepon : public Object
+class Wepon : public IObject
 {
 protected:
     Player *親;
@@ -19,9 +19,14 @@ protected:
 public:
     const ItemData::Data &性能;
 
+    Point shape;
+    SpImage sprite;
+
     Wepon(Player* 親 , Image* アイコン画像 , int 武器ID ) :
-        Object( new Point( 親->GetX() , 親->GetY() ) , new SpImage( アイコン画像 )),
+        IObject(shape,sprite),
         性能( ItemData::dataS[武器ID] ),
+        shape(親->GetX(), 親->GetY()),
+        sprite(アイコン画像),
         親(親)
     {
         レベル = 1 + std::min( 性能.強化レベル / 20 , 3 );

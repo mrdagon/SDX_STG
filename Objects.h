@@ -6,54 +6,45 @@
 namespace SDX_STG
 {
     using namespace SDX;
-    class エフェクト : public Object
+    template<class TSprite>
+    class エフェクト : public IObject
     {
+    private:
+        Point shape;
+        TSprite sprite;
     public:
-        エフェクト( Image* 画像 , double X座標 , double Y座標 , double 大きさ = 1.0):
-                Object( new Point( X座標 , Y座標 ) , new SpImage( 画像 ) )
-        {
-            sprites[0]->SetZoom(大きさ,大きさ);
-        }
-
-        エフェクト( Anime* アニメ画像 , double X座標 , double Y座標 , bool 消滅フラグ = true):
-                Object( new Point( X座標 , Y座標 ) , new SpAnime( アニメ画像 ) )
-        {
-            if (消滅フラグ)
-            {
-                lifeTime = アニメ画像->GetAnimeTime();
-            }
-        }
-
-        エフェクト( const IFont *フォント , double X座標 , double Y座標 ,  Color 色 , double 表示倍率 , VString 描画文字  ):
-                Object( new Point( X座標 , Y座標 ) , new SpFont( フォント , 色 , 表示倍率 , 表示倍率 , 描画文字.c_str() ) )
-        {}
-
-        エフェクト(const BmpFrame *BMPフレーム, double X座標, double Y座標, double 幅, double 高さ ) :
-                Object( new Point( X座標 , Y座標 ) , new SpFrame( BMPフレーム , 幅 , 高さ) )
+        エフェクト( TSprite &&描画方法 , double X座標 , double Y座標 ):
+                IObject( shape , sprite ),
+                shape(X座標, Y座標),
+                sprite(描画方法)
         {}
     };
 
-    class Acter : public Object
+    class Acter : public IObject
     {
-        SpImage* 体;
-        SpImageS* 目;
-        SpImageS* 口;
+    private:
+        Point shape;
+        SpImage sprite;
+
     public:
         Acter( double X座標 , double Y座標 , int ゆっくり種類 ):
-            Object( new Point(X座標,Y座標) , nullptr )
+            IObject( shape , sprite ),
+            shape(X座標, Y座標),
+            sprite(&MActer::れいむ体)
         {
-            //とりあえずれいむ
-            Add( 体 = new SpImage(&MActer::れいむ体));
-            Add( 目 = new SpImageS(&MActer::れいむ目));
-            Add( 口 = new SpImageS(&MActer::れいむ口));
         }
     };
 
-    class 背景 : public Object
+    class 背景 : public IObject
     {
     public:
+        Point shape;
+        SpMap sprite;
+
         背景( double 頂点座標X , double 頂点座標Y , ImagePack &マップチップ , const char* ファイル名, int 幅, int 高さ):
-            Object( new Point( 頂点座標X , 頂点座標Y ) , new SpMap( マップチップ , ファイル名, 幅, 高さ, 0) )
+            IObject( shape , sprite ),
+            shape(頂点座標X, 頂点座標Y),
+            sprite(マップチップ, ファイル名, 幅, 高さ, 0)
         {
             this->isOutCheck = false;
         }
@@ -64,13 +55,18 @@ namespace SDX_STG
         }
     };
 
-    class システム表示 : public Object
+    class システム表示 : public IObject
     {
     private:
         int score = 0;
     public:
+        Point shape;
+        SpImage sprite;
+
         システム表示() :
-            Object(new Point(0, 0), nullptr )
+            IObject(shape,sprite),
+            shape(0,0),
+            sprite(nullptr)
         {
             this->isOutCheck = false;
         }

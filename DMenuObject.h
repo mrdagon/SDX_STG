@@ -1,5 +1,6 @@
 ﻿#pragma once//☀SDX_STG
 #include "IMenu.h"
+#include <functional>
 
 namespace SDX_STG
 {
